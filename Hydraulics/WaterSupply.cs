@@ -5,6 +5,7 @@ namespace Hydraulics
     internal class WaterSupply
     {
         //зададим извесные данные из условия
+        #region given
         private readonly double d1 = 0.02;
         private readonly double d2 = 0.015;
         private readonly double delta = 0.0001;
@@ -17,35 +18,38 @@ namespace Hydraulics
         private readonly double H = 3.2;
         private readonly double h = 1;
         private readonly double QA = 0.0005;
+        #endregion
         //В нашей задаче 7 неизвестных: y1, y2, QB, QAB, QC, QABC, p
         private double Y1, Y2, QB, QAB, QC, QABC, p;
         //Коэффициенты трения
         private double lambdaA1, lambdaA2, lambdaB, lambdaAB, lambdaC, lambdaABC;
-        //Эквивалентная длина l
-        private double lEquivalent;
+        //Эквивалентная длина 
+        private double lEquivalent1;
+        private double lEquivalent2;
         //Опишем конструктор, который присваивает начальные значения коэффициентам сопротивления
         public WaterSupply()
         {
-            lambdaA1 = 0.032;
-            lambdaA2 = 0.033;
+            lambdaA1 = HydraulicUtils.EvaluateLambda(d1, QA, delta);
+            lambdaA2 = HydraulicUtils.EvaluateLambda(d2, QA, delta);
             //для нулевой итерации возьмем все коэффициенты сопротивления равными lambdaA1
             lambdaB = lambdaA1;
             lambdaAB = lambdaA1;
             lambdaC = lambdaA1;
             lambdaABC = lambdaA1;
-            //вычислим эквивалентную длину l
-            lEquivalent = l + (elbowLoss + valveLoss) * d2 / lambdaA2;
+            //вычислим эквивалентную длину 
+            lEquivalent1 = L + (valveLoss) * d1 / lambdaA1;
+            lEquivalent2 = l + (elbowLoss + valveLoss) * d2 / lambdaA2;
         }
         //Напишем метод для решения системы. Все формулы заранее выведены
         public void EvaluateVariables()
         {
-            Y1 = 0.0827 * (lambdaA1 * H / Math.Pow(d1, 5) + lambdaA2 * lEquivalent / Math.Pow(d2, 5)) * Math.Pow(QA, 2) + H - h;
-            QB = Math.Sqrt((Y1 + h) / (0.0827 * lambdaB * H / Math.Pow(d2, 5)));
+            Y1 = 0.0827 * (lambdaA1 * H / Math.Pow(d1, 5) + lambdaA2 * lEquivalent2 / Math.Pow(d2, 5)) * Math.Pow(QA, 2) + H - h;
+            QB = Math.Sqrt((Y1 + h) / (0.0827 * lambdaB * lEquivalent2 / Math.Pow(d2, 5)));
             QAB = QB + QA;
-            Y2 = -H + Y1 - 0.0827 * lambdaAB * H / Math.Pow(d1, 5) * Math.Pow(QAB, 2);
-            QC = Math.Sqrt((Y2 + h) / (0.0827 * lambdaC * lEquivalent / Math.Pow(d2, 5)));
+            Y2 = H + Y1 + 0.0827 * lambdaAB * H / Math.Pow(d1, 5) * Math.Pow(QAB, 2);
+            QC = Math.Sqrt((Y2 + h) / (0.0827 * lambdaC * lEquivalent2 / Math.Pow(d2, 5)));
             QABC = QAB + QC;
-            p = (Y2 + H + 0.0827 * lambdaABC * (H + L) / Math.Pow(d1, 5) * Math.Pow(QABC, 2)) * (rho * g);
+            p = (Y2 + H + 0.0827 * lambdaABC * (H + lEquivalent1) / Math.Pow(d1, 5)  * Math.Pow(QABC, 2)) * (rho * g);
         }
         //Напишем метод пересчета коэффициентов сопротивления
         public void EvaluateLambdas()
