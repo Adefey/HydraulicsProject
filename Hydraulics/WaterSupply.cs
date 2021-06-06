@@ -49,14 +49,14 @@ namespace Hydraulics
             Y2 = H + Y1 + 0.0827 * lambdaAB * H / Math.Pow(d1, 5) * Math.Pow(QAB, 2);
             QC = Math.Sqrt((Y2 + h) / (0.0827 * lambdaC * lEquivalent2 / Math.Pow(d2, 5)));
             QABC = QAB + QC;
-            p = (Y2 + H + 0.0827 * lambdaABC * (H + lEquivalent1) / Math.Pow(d1, 5)  * Math.Pow(QABC, 2)) * (rho * g);
+            p = (Y2 + H + 0.0827 * lambdaABC * (H + lEquivalent1) / Math.Pow(d1, 5) * Math.Pow(QABC, 2)) * (rho * g);
         }
         //Напишем метод пересчета коэффициентов сопротивления
         public void EvaluateLambdas()
         {
             lambdaB = HydraulicUtils.EvaluateLambda(d2, QB, delta);
             lambdaAB = HydraulicUtils.EvaluateLambda(d1, QAB, delta);
-            lambdaC = HydraulicUtils.EvaluateLambda(d1, QC, delta);
+            lambdaC = HydraulicUtils.EvaluateLambda(d2, QC, delta);
             lambdaABC = HydraulicUtils.EvaluateLambda(d1, QABC, delta);
         }
         //Вернуть ответ
