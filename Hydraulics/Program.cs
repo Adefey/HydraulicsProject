@@ -12,16 +12,16 @@ namespace Hydraulics
                 n = int.Parse(args[0]);
             }
 
-            WaterSupply ws = new WaterSupply();
+            WaterSupply waterSupply = new WaterSupply();
 
             for (int i = 0; i < n; i++)
             {
                 Console.WriteLine($"Итерация №{i}");
-                ws.EvaluateVariables();
-                Console.WriteLine($"Расчетные параметры:\r\n{ws.VariablesToString()}");
-                ws.EvaluateLambdas();
-                Console.WriteLine($"Коэффициенты трения:\r\n{ws.LambdasToString()}");
-                Console.WriteLine($"Давление в баке:\r\n{ws.GetP()}\r\n");
+                waterSupply.EvaluateVariables();
+                Console.WriteLine($"Расчетные параметры:\r\n{waterSupply.VariablesToString()}");
+                waterSupply.EvaluateLambdas();
+                Console.WriteLine($"Коэффициенты трения:\r\n{waterSupply.LambdasToString()}");
+                Console.WriteLine($"Давление в баке:\r\n{waterSupply.GetP()}\r\n");
             }
         }
     }

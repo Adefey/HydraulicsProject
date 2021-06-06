@@ -26,6 +26,7 @@ namespace Hydraulics
         //Эквивалентная длина 
         private double lEquivalent1;
         private double lEquivalent2;
+
         //Опишем конструктор, который присваивает начальные значения коэффициентам сопротивления
         public WaterSupply()
         {
@@ -40,6 +41,7 @@ namespace Hydraulics
             lEquivalent1 = L + (valveLoss) * d1 / lambdaA1;
             lEquivalent2 = l + (elbowLoss + valveLoss) * d2 / lambdaA2;
         }
+
         //Напишем метод для решения системы. Все формулы заранее выведены
         public void EvaluateVariables()
         {
@@ -51,6 +53,7 @@ namespace Hydraulics
             QABC = QAB + QC;
             p = (Y2 + H + 0.0827 * lambdaABC * (H + lEquivalent1) / Math.Pow(d1, 5) * Math.Pow(QABC, 2)) * (rho * g);
         }
+
         //Напишем метод пересчета коэффициентов сопротивления
         public void EvaluateLambdas()
         {
@@ -59,17 +62,20 @@ namespace Hydraulics
             lambdaC = HydraulicUtils.EvaluateLambda(d2, QC, delta);
             lambdaABC = HydraulicUtils.EvaluateLambda(d1, QABC, delta);
         }
+
         //Вернуть ответ
         public double GetP()
         {
             return p;
         }
 
+        //Вернуть строку из промежуточных результатов расчитываемых величин
         public string VariablesToString()
         {
             return $"Y1 = {Y1}\r\nQB = {QB}\r\nQAB = {QAB}\r\nY2 = {Y2}\r\nQC = {QC}\r\nQABC = {QABC}\r\np = {p}";
         }
 
+        //Вернуть строку из промежуточных результатов коэффициентов трения
         public string LambdasToString()
         {
             return $"LambdaA1 = {lambdaA1}\r\nLambdaA2 = {lambdaA2}\r\nLambdaB = {lambdaB}\r\nLambdaAB = {lambdaAB}\r\nLambdaC = {lambdaC}\r\nLambdaABC = {lambdaABC}";

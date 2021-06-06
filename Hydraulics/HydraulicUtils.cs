@@ -12,11 +12,13 @@ namespace Hydraulics
             return 0.1 * Math.Pow((1.46 * delta) / d + 100 / Re, 0.25);
         }
 
+        //метод для расчета скорости
         public static double EvaluateVelocity(double d, double Q)
         {
             return Q / (Math.PI * Math.Pow(d, 2) / 4);
         }
 
+        //метод для расчета числа Рейнольдса
         public static double EvaluateRenolds(double d, double v)
         {
             return (v * d) / (Math.Pow(10, -6));
