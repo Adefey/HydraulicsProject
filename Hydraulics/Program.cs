@@ -6,9 +6,15 @@ namespace Hydraulics
     {
         private static void Main(string[] args)
         {
+            int n = 5;
+            if (args.Length != 0)
+            {
+                n = int.Parse(args[0]);
+            }
+
             WaterSupply ws = new WaterSupply();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < n; i++)
             {
                 Console.WriteLine($"Итерация №{i}");
                 ws.EvaluateVariables();
